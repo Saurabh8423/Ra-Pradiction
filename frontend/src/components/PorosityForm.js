@@ -11,10 +11,13 @@ const PorosityForm = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:8000/porosity', formData);
+      const response = await axios.post('https://ra-pradiction.onrender.com/porosity', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
       setResult(response.data);
     } catch (err) {
       console.error(err);
+      alert('Error uploading file. Make sure the backend is running.');
     }
   };
 

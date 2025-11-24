@@ -9,12 +9,17 @@ const RaPredictForm = () => {
 
   const handlePredict = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/predict', null, {
-        params: { laser_power: laserPower, scanning_speed: scanningSpeed, hatch_spacing: hatchSpacing }
+      const response = await axios.post('https://ra-pradiction.onrender.com/predict', null, {
+        params: { 
+          laser_power: laserPower, 
+          scanning_speed: scanningSpeed, 
+          hatch_spacing: hatchSpacing 
+        }
       });
       setResult(response.data.predicted_ra.toFixed(3));
     } catch (err) {
       console.error(err);
+      alert('Error predicting Ra. Make sure the backend is running.');
     }
   };
 

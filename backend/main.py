@@ -10,9 +10,14 @@ from sklearn.model_selection import train_test_split
 
 # FastAPI setup
 app = FastAPI()
+
+# CORS configuration for production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For production, change to frontend domain
+    allow_origins=[
+        "https://ra-pradiction.vercel.app",  # Your deployed frontend
+        "http://localhost:3000"               # Optional: local dev frontend
+    ],
     allow_methods=["*"],
     allow_headers=["*"]
 )
