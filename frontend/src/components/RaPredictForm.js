@@ -23,13 +23,23 @@ const RaPredictForm = () => {
     }
   };
 
+  const clearForm = () => {
+    setLaserPower('');
+    setScanningSpeed('');
+    setHatchSpacing('');
+    setResult(null);
+  };
+
   return (
     <form>
       <h2>Predict Experimental Ra</h2>
       <input placeholder="Laser Power" value={laserPower} onChange={e => setLaserPower(e.target.value)} />
       <input placeholder="Scanning Speed" value={scanningSpeed} onChange={e => setScanningSpeed(e.target.value)} />
       <input placeholder="Hatch Spacing" value={hatchSpacing} onChange={e => setHatchSpacing(e.target.value)} />
-      <button type="button" onClick={handlePredict}>Predict</button>
+      <div className="button-group">
+        <button type="button" onClick={handlePredict}>Predict</button>
+        <button type="button" onClick={clearForm} className="clear-button">Clear</button>
+      </div>
       {result && <p>Predicted Ra: {result}</p>}
     </form>
   );
