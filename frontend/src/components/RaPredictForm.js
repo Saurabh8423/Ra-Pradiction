@@ -1,43 +1,33 @@
-import React, { useState } from "react";
-import api from "../services/api";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-function RaPredictForm() {
-  const [form, setForm] = useState({
-    power: "",
-    speed: "",
-    hatch: "",
-  });
-
+const RaPredictForm = () => {
+  const [laserPower, setLaserPower] = useState('');
+  const [scanningSpeed, setScanningSpeed] = useState('');
+  const [hatchSpacing, setHatchSpacing] = useState('');
   const [result, setResult] = useState(null);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const predict = async () => {
-    const res = await api.post(
-      `/predict-ra?power=${form.power}&speed=${form.speed}&hatch=${form.hatch}`
-    );
-    setResult(res.data.Predicted_Ra);
+  const handlePredict = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/predict', null, {
+        params: { laser_power: laserPower, scanning_speed: scanningSpeed, hatch_spacing: hatchSpacing }
+      });
+      setResult(response.data.predicted_ra.toFixed(3));
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-    <div className="p-6 bg-white shadow rounded w-full md:w-1/2 mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Predict Experimental Ra</h2>
-
-      <input name="power" onChange={handleChange} placeholder="Laser Power" className="input" />
-      <input name="speed" onChange={handleChange} placeholder="Scanning Speed" className="input" />
-      <input name="hatch" onChange={handleChange} placeholder="Hatch Spacing" className="input" />
-
-      <button onClick={predict} className="btn-primary mt-3">Predict</button>
-
-      {result && (
-        <p className="text-lg mt-4 font-semibold">
-          Predicted Ra: {result.toFixed(3)}
-        </p>
-      )}
-    </div>
+    <form>
+      <h2>Predict Experimental Ra</h2>
+      <input placeholder="Laser Power" value={laserPower} onChange={e => setLaserPower(e.target.value)} />
+      <input placeholder="Scanning Speed" value={scanningSpeed} onChange={e => setScanningSpeed(e.target.value)} />
+      <input placeholder="Hatch Spacing" value={hatchSpacing} onChange={e => setHatchSpacing(e.target.value)} />
+      <button type="button" onClick={handlePredict}>Predict</button>
+      {result && <p>Predicted Ra: {result}</p>}
+    </form>
   );
-}
+};
 
 export default RaPredictForm;
